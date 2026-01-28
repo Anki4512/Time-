@@ -1,3 +1,7 @@
+@app.route('/boss')
+def boss_dashboard():
+    # ... code ...
+    return render_template('boss.html', shifts=all_shifts)
 <!DOCTYPE html>
 <html>
 <head>
