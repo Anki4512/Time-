@@ -2,55 +2,39 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Timer</title>
+    <title>Employee Log</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md mt-10">
-        <h1 class="text-2xl font-bold mb-4 text-gray-800">Log Your Shift</h1>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white w-full max-w-md p-8 rounded-2xl shadow-xl border border-gray-100">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6">Clock In</h1>
         
-        <label class="block text-sm font-medium mb-1">Employee Name</label>
-        <input type="text" id="username" placeholder="Enter your name" class="border p-2 w-full mb-4 rounded">
-
-        <label class="block text-sm font-medium mb-1">Date</label>
-        <input type="date" id="shift_date" class="border p-2 w-full mb-4 rounded">
-
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Clock In</label>
-                <input type="time" id="in" class="border p-2 w-full mb-4 rounded">
+        <div class="space-y-4">
+            <input type="text" id="username" placeholder="Full Name" class="w-full p-4 bg-gray-100 rounded-lg border-none focus:ring-2 focus:ring-blue-500">
+            <input type="date" id="shift_date" class="w-full p-4 bg-gray-100 rounded-lg border-none">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="time" id="in" class="p-4 bg-gray-100 rounded-lg border-none">
+                <input type="time" id="out" class="p-4 bg-gray-100 rounded-lg border-none">
             </div>
-            <div>
-                <label class="block text-sm font-medium mb-1">Clock Out</label>
-                <input type="time" id="out" class="border p-2 w-full mb-4 rounded">
-            </div>
+            <button onclick="submit()" class="w-full py-4 bg-blue-600 text-white font-black rounded-lg shadow-lg hover:bg-blue-700 transition">LOG HOURS</button>
         </div>
-
-        <button onclick="calc()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Submit Shift</button>
-        <p id="result" class="mt-4 font-bold text-center text-xl text-green-600"></p>
+        <p id="msg" class="mt-6 text-center font-bold text-blue-600 text-lg"></p>
     </div>
-
     <script>
-        async function calc() {
+        async function submit() {
             const data = { 
                 name: document.getElementById('username').value,
                 date: document.getElementById('shift_date').value,
                 in: document.getElementById('in').value, 
                 out: document.getElementById('out').value 
             };
-            
-            if(!data.name || !data.date || !data.in || !data.out) {
-                alert("Please fill in all fields");
-                return;
-            }
-
             const res = await fetch('/calculate', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
             const json = await res.json();
-            document.getElementById('result').innerText = "Logged: " + json.total_hours + " hrs";
+            document.getElementById('msg').innerText = "Successfully Logged: " + json.total_hours + " hrs";
         }
     </script>
 </body>

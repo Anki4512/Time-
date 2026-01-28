@@ -2,7 +2,6 @@ import sqlite3
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 
-# THIS LINE MUST BE HERE BEFORE ANY @APP.ROUTE
 app = Flask(__name__)
 
 def init_db():
@@ -23,7 +22,7 @@ def home():
 def calculate():
     data = request.json
     fmt = '%H:%M'
-    # Simple calculation logic
+    # Automatic Calculation Logic
     tdelta = datetime.strptime(data['out'], fmt) - datetime.strptime(data['in'], fmt)
     hours = round(tdelta.seconds / 3600, 2)
     
@@ -40,7 +39,7 @@ def boss_dashboard():
     conn = sqlite3.connect('work_data.db')
     cursor = conn.cursor()
     
-    # Weekly logic for the paper-style sheet
+    # Calculate current week dates (Monday to Sunday)
     today = datetime.now()
     start_week = (today - timedelta(days=today.weekday())).strftime('%Y-%m-%d')
     end_week = (today + timedelta(days=6 - today.weekday())).strftime('%Y-%m-%d')
@@ -50,9 +49,7 @@ def boss_dashboard():
     
     report = {}
     employees = set()
-    dates = []
-    for i in range(7):
-        dates.append((today - timedelta(days=today.weekday() - i)).strftime('%Y-%m-%d'))
+    dates = [(today - timedelta(days=today.weekday() - i)).strftime('%Y-%m-%d') for i in range(7)]
 
     for user, date, total in data:
         employees.add(user)

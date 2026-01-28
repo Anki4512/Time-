@@ -1,60 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Weekly Timesheet</title>
+    <title>Weekly Payroll Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>@media print { .no-print { display: none; } }</style>
 </head>
-<body class="bg-gray-100 p-4 sm:p-8">
-    <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300">
-        <div class="bg-gray-50 p-6 border-b border-gray-300 flex justify-between items-end">
+<body class="bg-gray-100 p-4 sm:p-10">
+    <div class="max-w-6xl mx-auto bg-white shadow-2xl rounded-lg border border-gray-300">
+        <div class="p-8 border-b border-gray-200 flex justify-between items-center">
             <div>
-                <h1 class="text-xl font-bold uppercase tracking-widest text-gray-700">Weekly Time Sheet</h1>
-                <p class="text-sm text-gray-500 font-mono">Period: {{ dates[0] }} — {{ dates[-1] }}</p>
+                <h1 class="text-2xl font-black uppercase text-gray-800">Weekly Time Sheet</h1>
+                <p class="text-sm text-gray-500">Current Week: {{ dates[0] }} - {{ dates[-1] }}</p>
             </div>
-            <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold">Print/PDF</button>
+            <button onclick="window.print()" class="no-print bg-black text-white px-6 py-2 rounded font-bold hover:bg-gray-800">Export to PDF</button>
         </div>
-
         <div class="overflow-x-auto">
             <table class="w-full border-collapse">
                 <thead>
                     <tr class="bg-gray-50">
-                        <th class="border border-gray-300 p-2 text-left w-24">Day</th>
+                        <th class="border border-gray-200 p-4 text-left font-bold text-gray-600">DAY/DATE</th>
                         {% for emp in employees %}
-                        <th colspan="2" class="border border-gray-300 p-2 text-center uppercase font-bold text-sm bg-blue-50 text-blue-800">{{ emp }}</th>
-                        {% endfor %}
-                    </tr>
-                    <tr class="bg-gray-100 text-[10px] uppercase text-gray-500">
-                        <th class="border border-gray-300 p-1"></th>
-                        {% for emp in employees %}
-                        <th class="border border-gray-300 p-1">Time</th>
-                        <th class="border border-gray-300 p-1">Hrs</th>
+                        <th class="border border-gray-200 p-4 text-center bg-blue-50 text-blue-900 font-black uppercase">{{ emp }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for date in dates %}
-                    <tr>
-                        <td class="border border-gray-300 p-2 font-bold text-gray-600 bg-gray-50 text-xs">
-                            {{ date }}
-                        </td>
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-200 p-4 text-sm font-medium">{{ date }}</td>
                         {% for emp in employees %}
-                        <td class="border border-gray-300 p-2 text-center text-xs text-gray-400 italic">Log Required</td>
-                        <td class="border border-gray-300 p-2 text-center font-bold text-blue-700">
-                            {{ report[emp][date] if date in report[emp] else '-' }}
+                        <td class="border border-gray-200 p-4 text-center font-mono font-bold text-blue-600">
+                            {{ report[emp][date] if date in report[emp] else '—' }}
                         </td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
-                    <tr class="bg-yellow-50 font-bold">
-                        <td class="border border-gray-300 p-2 text-right uppercase text-xs">Total Hrs</td>
+                </tbody>
+                <tfoot class="bg-gray-900 text-white">
+                    <tr>
+                        <td class="p-4 text-right font-bold uppercase text-xs">Total Hours</td>
                         {% for emp in employees %}
-                        <td class="border border-gray-300 p-2"></td>
-                        <td class="border border-gray-300 p-2 text-center text-lg text-red-600">
+                        <td class="p-4 text-center text-lg font-black text-green-400">
                             {{ report[emp].values()|sum|round(2) }}
                         </td>
                         {% endfor %}
                     </tr>
-                </tbody>
+                </tfoot>
             </table>
         </div>
     </div>
