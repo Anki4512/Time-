@@ -1,31 +1,36 @@
-@app.route('/boss')
-def boss_dashboard():
-    # ... code ...
-    return render_template('boss.html', shifts=all_shifts)
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Employer Dashboard</title>
+    <title>Boss Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white p-8">
-    <h1 class="text-3xl font-bold mb-6">Employee Logs</h1>
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Employee Logs</h1>
+        <div class="space-x-2">
+            <a href="/boss" class="bg-gray-700 px-4 py-2 rounded">All</a>
+            <a href="/boss?filter=week" class="bg-blue-600 px-4 py-2 rounded">This Week</a>
+            <a href="/boss?filter=month" class="bg-green-600 px-4 py-2 rounded">This Month</a>
+        </div>
+    </div>
     <table class="w-full bg-gray-800 rounded-lg overflow-hidden">
-        <thead class="bg-gray-700">
+        <thead class="bg-gray-700 text-gray-300">
             <tr>
-                <th class="p-3 text-left">User</th>
-                <th class="p-3 text-left">Clock In</th>
-                <th class="p-3 text-left">Clock Out</th>
-                <th class="p-3 text-left">Hours</th>
+                <th class="p-3 text-left">Date</th>
+                <th class="p-3 text-left">Employee</th>
+                <th class="p-3 text-left">In</th>
+                <th class="p-3 text-left">Out</th>
+                <th class="p-3 text-left">Total Hours</th>
             </tr>
         </thead>
         <tbody>
             {% for shift in shifts %}
             <tr class="border-b border-gray-700">
-                <td class="p-3">{{ shift[1] }}</td>
                 <td class="p-3">{{ shift[2] }}</td>
+                <td class="p-3">{{ shift[1] }}</td>
                 <td class="p-3">{{ shift[3] }}</td>
-                <td class="p-3 text-green-400 font-bold">{{ shift[4] }}</td>
+                <td class="p-3">{{ shift[4] }}</td>
+                <td class="p-3 text-green-400 font-bold">{{ shift[5] }}</td>
             </tr>
             {% endfor %}
         </tbody>
