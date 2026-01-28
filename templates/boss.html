@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Boss Dashboard</title>
+    <title>Employer Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white p-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Employee Logs</h1>
-        <div class="space-x-2">
-            <a href="/boss" class="bg-gray-700 px-4 py-2 rounded">All</a>
-            <a href="/boss?filter=week" class="bg-blue-600 px-4 py-2 rounded">This Week</a>
-            <a href="/boss?filter=month" class="bg-green-600 px-4 py-2 rounded">This Month</a>
+<body class="bg-slate-50 p-8 text-slate-800">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-2">Company Overview</h1>
+        <p class="text-slate-500 mb-8">Summary of hours worked in the last 7 days.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-sm font-semibold text-slate-400 uppercase">Active Employees</p>
+                <p class="text-3xl font-bold">{{ summary|length }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-semibold text-slate-600">Employee Name</th>
+                        <th class="p-4 font-semibold text-slate-600 text-center">Shifts Logged</th>
+                        <th class="p-4 font-semibold text-slate-600 text-center">Total Hours (Week)</th>
+                        <th class="p-4 font-semibold text-slate-600 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in summary %}
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4 font-medium">{{ emp[0] }}</td>
+                        <td class="p-4 text-center">{{ emp[2] }}</td>
+                        <td class="p-4 text-center text-blue-600 font-bold">{{ emp[1] }} hrs</td>
+                        <td class="p-4 text-right">
+                            <a href="/boss/details/{{ emp[0] }}" class="text-sm bg-slate-100 px-3 py-1 rounded-md border border-slate-300 hover:bg-white">View Full Sheet</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    <table class="w-full bg-gray-800 rounded-lg overflow-hidden">
-        <thead class="bg-gray-700 text-gray-300">
-            <tr>
-                <th class="p-3 text-left">Date</th>
-                <th class="p-3 text-left">Employee</th>
-                <th class="p-3 text-left">In</th>
-                <th class="p-3 text-left">Out</th>
-                <th class="p-3 text-left">Total Hours</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for shift in shifts %}
-            <tr class="border-b border-gray-700">
-                <td class="p-3">{{ shift[2] }}</td>
-                <td class="p-3">{{ shift[1] }}</td>
-                <td class="p-3">{{ shift[3] }}</td>
-                <td class="p-3">{{ shift[4] }}</td>
-                <td class="p-3 text-green-400 font-bold">{{ shift[5] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 </body>
 </html>
