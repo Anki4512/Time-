@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Employer Dashboard</title>
+    <title>Weekly Timesheet</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 p-8 text-slate-800">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold mb-2">Company Overview</h1>
-        <p class="text-slate-500 mb-8">Summary of hours worked in the last 7 days.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                <p class="text-sm font-semibold text-slate-400 uppercase">Active Employees</p>
-                <p class="text-3xl font-bold">{{ summary|length }}</p>
+<body class="bg-gray-100 p-4 sm:p-8">
+    <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300">
+        <div class="bg-gray-50 p-6 border-b border-gray-300 flex justify-between items-end">
+            <div>
+                <h1 class="text-xl font-bold uppercase tracking-widest text-gray-700">Weekly Time Sheet</h1>
+                <p class="text-sm text-gray-500 font-mono">Period: {{ dates[0] }} — {{ dates[-1] }}</p>
             </div>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold">Print/PDF</button>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <table class="w-full text-left">
-                <thead class="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                        <th class="p-4 font-semibold text-slate-600">Employee Name</th>
-                        <th class="p-4 font-semibold text-slate-600 text-center">Shifts Logged</th>
-                        <th class="p-4 font-semibold text-slate-600 text-center">Total Hours (Week)</th>
-                        <th class="p-4 font-semibold text-slate-600 text-right">Action</th>
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="border border-gray-300 p-2 text-left w-24">Day</th>
+                        {% for emp in employees %}
+                        <th colspan="2" class="border border-gray-300 p-2 text-center uppercase font-bold text-sm bg-blue-50 text-blue-800">{{ emp }}</th>
+                        {% endfor %}
+                    </tr>
+                    <tr class="bg-gray-100 text-[10px] uppercase text-gray-500">
+                        <th class="border border-gray-300 p-1"></th>
+                        {% for emp in employees %}
+                        <th class="border border-gray-300 p-1">Time</th>
+                        <th class="border border-gray-300 p-1">Hrs</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% for emp in summary %}
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="p-4 font-medium">{{ emp[0] }}</td>
-                        <td class="p-4 text-center">{{ emp[2] }}</td>
-                        <td class="p-4 text-center text-blue-600 font-bold">{{ emp[1] }} hrs</td>
-                        <td class="p-4 text-right">
-                            <a href="/boss/details/{{ emp[0] }}" class="text-sm bg-slate-100 px-3 py-1 rounded-md border border-slate-300 hover:bg-white">View Full Sheet</a>
+                    {% for date in dates %}
+                    <tr>
+                        <td class="border border-gray-300 p-2 font-bold text-gray-600 bg-gray-50 text-xs">
+                            {{ date }}
                         </td>
+                        {% for emp in employees %}
+                        <td class="border border-gray-300 p-2 text-center text-xs text-gray-400 italic">Log Required</td>
+                        <td class="border border-gray-300 p-2 text-center font-bold text-blue-700">
+                            {{ report[emp][date] if date in report[emp] else '-' }}
+                        </td>
+                        {% endfor %}
                     </tr>
                     {% endfor %}
+                    <tr class="bg-yellow-50 font-bold">
+                        <td class="border border-gray-300 p-2 text-right uppercase text-xs">Total Hrs</td>
+                        {% for emp in employees %}
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2 text-center text-lg text-red-600">
+                            {{ report[emp].values()|sum|round(2) }}
+                        </td>
+                        {% endfor %}
+                    </tr>
                 </tbody>
             </table>
         </div>
