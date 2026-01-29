@@ -49,3 +49,22 @@ async function shareDashboard() {
         .shadow-2xl { shadow: none; border: 1px solid #eee; }
     }
 </style>
+<tfoot class="bg-slate-800 text-white">
+    <tr class="animate__animated animate__fadeIn">
+        <td class="p-5 font-black uppercase text-xs tracking-widest">Grand Totals</td>
+        {% set grand_total = namespace(value=0) %}
+        {% for emp in employees %}
+            <td class="p-5 text-center font-mono text-lg text-green-400 font-black">
+                {% set emp_total = report[emp].values()|sum|round(2) %}
+                {{ emp_total }}
+                {% set grand_total.value = grand_total.value + emp_total %}
+            </td>
+        {% endfor %}
+    </tr>
+    <tr class="bg-indigo-900 border-t border-indigo-800">
+        <td class="p-3 text-right text-[10px] uppercase font-bold text-indigo-300">Company Total (All Staff)</td>
+        <td colspan="{{ employees|length }}" class="p-3 text-center text-xl font-black text-white">
+            {{ grand_total.value|round(2) }} hrs
+        </td>
+    </tr>
+</tfoot>

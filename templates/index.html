@@ -21,14 +21,31 @@
         </div>
         <div id="status" class="hidden mt-6 p-4 bg-green-100 text-green-700 rounded-xl text-center font-bold animate__animated animate__fadeIn">Success! Hours Logged.</div>
     </div>
-
-    <script>
-        async function send() {
-            const data = { name: document.getElementById('name').value, date: document.getElementById('date').value, in: document.getElementById('in').value, out: document.getElementById('out').value };
-            await fetch('/calculate', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
-            document.getElementById('status').classList.remove('hidden');
-            setTimeout(() => location.reload(), 2000);
-        }
-    </script>
+<script>
+async function send() {
+    const data = { 
+        name: document.getElementById('name').value, 
+        date: document.getElementById('date').value, 
+        in: document.getElementById('in').value, 
+        out: document.getElementById('out').value 
+    };
+    
+    const response = await fetch('/calculate', { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data) 
+    });
+    
+    const result = await response.json();
+    
+    // Show the status and the total for that specific entry
+    const statusDiv = document.getElementById('status');
+    statusDiv.innerHTML = `✅ Successfully Logged: <span class="text-2xl">${result.total_hours}</span> hrs`;
+    statusDiv.classList.remove('hidden');
+    
+    // Refresh after 3 seconds to clear the form
+    setTimeout(() => location.reload(), 3000);
+}
+</script>
 </body>
 </html>
