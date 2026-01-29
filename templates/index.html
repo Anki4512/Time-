@@ -2,44 +2,33 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Log</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white w-full max-w-md p-8 rounded-2xl shadow-xl border border-gray-100">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-6">Clock In</h1>
+<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center p-4">
+    <div class="animate__animated animate__backInUp bg-white/90 backdrop-blur-lg w-full max-w-md p-8 rounded-3xl shadow-2xl">
+        <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2">Track Hours</h1>
+        <p class="text-gray-500 mb-8 font-medium">Fast. Simple. Reliable.</p>
         
         <div class="space-y-4">
-            <input type="text" id="username" placeholder="Full Name" class="w-full p-4 bg-gray-100 rounded-lg border-none focus:ring-2 focus:ring-blue-500">
-            <input type="date" id="shift_date" class="w-full p-4 bg-gray-100 rounded-lg border-none">
+            <input type="text" id="name" placeholder="Name" class="w-full p-4 rounded-2xl bg-gray-100 border-none focus:ring-4 focus:ring-purple-300 transition-all outline-none">
+            <input type="date" id="date" class="w-full p-4 rounded-2xl bg-gray-100 border-none outline-none">
             <div class="grid grid-cols-2 gap-4">
-                <input type="time" id="in" class="p-4 bg-gray-100 rounded-lg border-none">
-                <input type="time" id="out" class="p-4 bg-gray-100 rounded-lg border-none">
+                <input type="time" id="in" class="p-4 rounded-2xl bg-gray-100 border-none outline-none">
+                <input type="time" id="out" class="p-4 rounded-2xl bg-gray-100 border-none outline-none">
             </div>
-            <button onclick="submit()" class="w-full py-4 bg-blue-600 text-white font-black rounded-lg shadow-lg hover:bg-blue-700 transition">LOG HOURS</button>
+            <button onclick="send()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-transform">SUBMIT LOG</button>
         </div>
-        <p id="msg" class="mt-6 text-center font-bold text-blue-600 text-lg"></p>
+        <div id="status" class="hidden mt-6 p-4 bg-green-100 text-green-700 rounded-xl text-center font-bold animate__animated animate__fadeIn">Success! Hours Logged.</div>
     </div>
+
     <script>
-        async function submit() {
-            const data = { 
-                name: document.getElementById('username').value,
-                date: document.getElementById('shift_date').value,
-                in: document.getElementById('in').value, 
-                out: document.getElementById('out').value 
-            };
-            const res = await fetch('/calculate', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            const json = await res.json();
-            document.getElementById('msg').innerText = "Successfully Logged: " + json.total_hours + " hrs";
+        async function send() {
+            const data = { name: document.getElementById('name').value, date: document.getElementById('date').value, in: document.getElementById('in').value, out: document.getElementById('out').value };
+            await fetch('/calculate', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            document.getElementById('status').classList.remove('hidden');
+            setTimeout(() => location.reload(), 2000);
         }
-        <div class="flex justify-between mb-4">
-    <button onclick="location.reload()" class="bg-gray-200 p-2 rounded text-sm">🔄 Refresh</button>
-    <a href="/logout" class="text-red-500 text-sm">Logout</a>
-</div>
     </script>
 </body>
 </html>

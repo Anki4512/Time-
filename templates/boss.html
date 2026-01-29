@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-6xl mx-auto bg-white shadow-xl rounded-lg border border-gray-300">
-        <div class="p-6 border-b flex justify-between items-center">
-            <h1 class="text-2xl font-bold uppercase">Weekly Timesheet</h1>
-            <div class="space-x-4">
-                <button onclick="location.reload()" class="bg-blue-50 text-blue-600 px-4 py-2 rounded">🔄 Refresh</button>
-                <a href="/logout" class="text-red-600">Logout</a>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body class="bg-slate-50 p-4 sm:p-10">
+    <div class="animate__animated animate__fadeIn max-w-6xl mx-auto bg-white rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="p-10 flex justify-between items-center bg-white/50 backdrop-blur-md">
+            <div>
+                <h1 class="text-3xl font-black text-slate-800 tracking-tighter italic">WEEKLY INSIGHTS</h1>
+                <p class="text-slate-400 font-mono text-sm uppercase">Automatic Sync Active</p>
             </div>
+            <button onclick="location.reload()" class="group bg-indigo-600 p-4 rounded-full shadow-indigo-200 shadow-xl hover:rotate-180 transition-all duration-500">
+                <span class="text-white font-bold">🔄</span>
+            </button>
         </div>
-        <table class="w-full border-collapse">
-            <thead class="bg-gray-50">
-                <tr><th class="border p-4 text-left">Date</th>
-                {% for emp in employees %}<th class="border p-4 text-center bg-blue-50 font-black">{{ emp }}</th>{% endfor %}</tr>
-            </thead>
-            <tbody>
-                {% for date in dates %}
-                <tr><td class="border p-4 text-sm">{{ date }}</td>
-                {% for emp in employees %}<td class="border p-4 text-center font-bold text-blue-600">{{ report[emp][date] if date in report[emp] else '-' }}</td>{% endfor %}</tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left border-separate border-spacing-2">
+                <thead>
+                    <tr>
+                        <th class="p-4 text-slate-400 uppercase text-xs font-bold">Timeline</th>
+                        {% for emp in employees %}
+                        <th class="p-4 bg-indigo-50 rounded-2xl text-center text-indigo-700 font-black uppercase tracking-widest text-sm">{{ emp }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for date in dates %}
+                    <tr class="animate__animated animate__fadeInUp" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                        <td class="p-4 font-bold text-slate-700 text-sm">{{ date }}</td>
+                        {% for emp in employees %}
+                        <td class="p-4 text-center bg-slate-50 rounded-2xl border border-slate-100 font-mono font-bold text-indigo-600">
+                            {{ report[emp][date] if date in report[emp] else '—' }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
