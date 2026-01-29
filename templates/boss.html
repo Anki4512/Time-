@@ -36,6 +36,13 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                <div class="p-8 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Weekly Timesheet</h1>
+    <div class="space-x-4">
+        <button onclick="location.reload()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold">🔄 Sync Logs</button>
+        <a href="/logout" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">Logout</a>
+    </div>
+</div>
                 <tfoot class="bg-gray-900 text-white">
                     <tr>
                         <td class="p-4 text-right font-bold uppercase text-xs">Total Hours</td>

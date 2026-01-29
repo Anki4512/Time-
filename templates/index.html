@@ -36,6 +36,10 @@
             const json = await res.json();
             document.getElementById('msg').innerText = "Successfully Logged: " + json.total_hours + " hrs";
         }
+        <div class="flex justify-between mb-4">
+    <button onclick="location.reload()" class="bg-gray-200 p-2 rounded text-sm">🔄 Refresh</button>
+    <a href="/logout" class="text-red-500 text-sm">Logout</a>
+</div>
     </script>
 </body>
 </html>
