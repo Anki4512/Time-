@@ -7,6 +7,7 @@ app = Flask(__name__)
 def init_db():
     conn = sqlite3.connect('work_data.db')
     cursor = conn.cursor()
+    # Table to store all work hours
     cursor.execute('''CREATE TABLE IF NOT EXISTS shifts 
                       (id INTEGER PRIMARY KEY, user TEXT, date TEXT, clock_in TEXT, clock_out TEXT, total REAL)''')
     conn.commit()
@@ -16,16 +17,16 @@ init_db()
 
 @app.route('/')
 def home():
-    # Direct access to employee log
     return render_template('index.html')
 
 @app.route('/boss')
 def boss_dashboard():
-    # Direct access to boss dashboard
     conn = sqlite3.connect('work_data.db')
     cursor = conn.cursor()
     today = datetime.now()
+    # Create a list of dates for the current week (Monday to Sunday)
     dates = [(today - timedelta(days=today.weekday() - i)).strftime('%Y-%m-%d') for i in range(7)]
+    
     cursor.execute("SELECT user, date, total FROM shifts")
     data = cursor.fetchall()
     
@@ -35,6 +36,7 @@ def boss_dashboard():
         employees.add(user)
         if user not in report: report[user] = {}
         report[user][date] = total
+        
     conn.close()
     return render_template('boss.html', report=report, employees=sorted(list(employees)), dates=dates)
 
@@ -42,8 +44,10 @@ def boss_dashboard():
 def calculate():
     data = request.json
     fmt = '%H:%M'
+    # Automatic hour calculation
     tdelta = datetime.strptime(data['out'], fmt) - datetime.strptime(data['in'], fmt)
     hours = round(tdelta.seconds / 3600, 2)
+    
     conn = sqlite3.connect('work_data.db')
     cursor = conn.cursor()
     cursor.execute("INSERT INTO shifts (user, date, clock_in, clock_out, total) VALUES (?, ?, ?, ?, ?)", 
