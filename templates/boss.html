@@ -10,8 +10,8 @@
         
         <div class="p-8 flex flex-col md:flex-row justify-between items-center bg-white/50 backdrop-blur-md gap-4 no-print">
             <div>
-                <h1 class="text-3xl font-black text-slate-800 tracking-tighter italic">WEEKLY INSIGHTS</h1>
-                <p class="text-slate-400 font-mono text-sm uppercase">Automatic Sync Active</p>
+                <h1 class="text-3xl font-black text-slate-800 tracking-tighter italic uppercase">Weekly Insights</h1>
+                <p class="text-slate-400 font-mono text-sm">Real-time team overview</p>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="window.print()" class="flex items-center gap-2 bg-slate-800 text-white px-5 py-3 rounded-2xl shadow-lg hover:bg-slate-700 transition-all">
@@ -20,7 +20,7 @@
                 <button onclick="shareDashboard()" class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-lg hover:bg-indigo-700 transition-all">
                     <span>📤</span> <span class="font-bold text-sm">Share</span>
                 </button>
-                <button onclick="location.reload()" class="bg-white border p-3 rounded-2xl shadow-sm hover:rotate-180 transition-all duration-500">🔄</button>
+                <button onclick="location.reload()" class="bg-white border p-3 rounded-2xl shadow-sm">🔄</button>
             </div>
         </div>
 
@@ -28,15 +28,15 @@
             <table class="w-full border-separate border-spacing-2">
                 <thead>
                     <tr>
-                        <th class="p-4 text-slate-400 uppercase text-xs font-bold">Timeline</th>
+                        <th class="p-4 text-slate-400 uppercase text-xs font-bold text-left">Date</th>
                         {% for emp in employees %}
-                        <th class="p-4 bg-indigo-50 rounded-2xl text-center text-indigo-700 font-black uppercase text-sm">{{ emp }}</th>
+                        <th class="p-4 bg-indigo-50 rounded-2xl text-center text-indigo-700 font-black text-sm uppercase">{{ emp }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for date in dates %}
-                    <tr class="animate__animated animate__fadeInUp">
+                    <tr>
                         <td class="p-4 font-bold text-slate-700 text-sm">{{ date }}</td>
                         {% for emp in employees %}
                         <td class="p-4 text-center bg-slate-50 rounded-2xl font-mono font-bold text-indigo-600">
@@ -48,7 +48,7 @@
                 </tbody>
                 <tfoot class="bg-slate-900 text-white">
                     <tr>
-                        <td class="p-5 font-black uppercase text-xs">Totals</td>
+                        <td class="p-5 font-black uppercase text-xs">Employee Totals</td>
                         {% set grand_total = namespace(value=0) %}
                         {% for emp in employees %}
                             <td class="p-5 text-center font-mono text-lg text-green-400 font-black">
@@ -59,7 +59,7 @@
                         {% endfor %}
                     </tr>
                     <tr class="bg-indigo-900">
-                        <td class="p-3 text-right text-[10px] uppercase font-bold text-indigo-300">Company Sum</td>
+                        <td class="p-3 text-right text-xs uppercase font-bold text-indigo-300">Company Sum</td>
                         <td colspan="{{ employees|length }}" class="p-3 text-center text-xl font-black text-white">
                             {{ grand_total.value|round(2) }} hrs
                         </td>
@@ -72,7 +72,7 @@
     <script>
         async function shareDashboard() {
             const shareData = { title: 'Time Report', text: 'Weekly hours summary.', url: window.location.href };
-            try { await navigator.share(shareData); } catch (err) { alert('Use the PDF button to share manually!'); }
+            try { await navigator.share(shareData); } catch (err) { alert('Use PDF to share manually!'); }
         }
     </script>
 </body>
